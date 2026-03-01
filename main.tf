@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "/terraform-state-nabiyou-123"
+    bucket = "terraform-state-nabiyou-123"
     key    = "nabiyou/terraform.tfstate"
     region = "us-east-1"
   }
