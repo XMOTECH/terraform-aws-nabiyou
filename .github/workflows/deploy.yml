@@ -4,23 +4,12 @@ name: Déploiement CI/CD Nabiyou
 on:
   push:
     branches:
-      - main # À chaque fois qu'on envoie du code sur la branche main
+      - main
 
 # 2. QUE doit-il faire ?
 jobs:
   deploiement_cloud:
-    runs-on: ubuntu-latest # Il utilise un serveur Linux gratuit fourni par GitHubname: Déploiement CI/CD Nabiyou
-
-# 1. QUAND le robot doit-il se réveiller ?
-on:
-  push:
-    branches:
-      - main # À chaque fois qu'on envoie du code sur la branche main
-
-# 2. QUE doit-il faire ?
-jobs:
-  deploiement_cloud:
-    runs-on: ubuntu-latest # Il utilise un serveur Linux gratuit fourni par GitHub
+    runs-on: ubuntu-latest
 
     steps:
       - name: 1. Récupérer le code source
@@ -58,46 +47,6 @@ jobs:
 
       - name: 8. Déployer l'application avec Ansible
         env:
-          ANSIBLE_HOST_KEY_CHECKING: False # Pour ignorer la question "yes/no" du SSH
-        run: |
-          ansible-playbook -i "${{ steps.get_ip.outputs.ip }}," -u ubuntu --private-key nabiyou_key playbook.yml
-
-    steps:
-      - name: 1. Récupérer le code source
-        uses: actions/checkout@v4
-
-      - name: 2. S'authentifier chez AWS (avec les Secrets)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: 3. Installer l'architecte Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: 4. Construire l'infrastructure (Terraform Init & Apply)
-        run: |
-          terraform init
-          terraform apply -auto-approve
-
-      - name: 5. Capturer la nouvelle adresse IP
-        id: get_ip
-        run: |
-          EC2_IP=$(terraform output -raw adresse_ip_publique)
-          echo "ip=$EC2_IP" >> $GITHUB_OUTPUT
-          echo "L'adresse IP du nouveau serveur est : $EC2_IP"
-
-      - name: 6. Préparer le Pass VIP (Clé SSH)
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > nabiyou_key
-          chmod 400 nabiyou_key
-
-      - name: 7. Patienter le temps que le serveur AWS s'allume
-        run: sleep 45
-
-      - name: 8. Déployer l'application avec Ansible
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: False # Pour ignorer la question "yes/no" du SSH
+          ANSIBLE_HOST_KEY_CHECKING: False
         run: |
           ansible-playbook -i "${{ steps.get_ip.outputs.ip }}," -u ubuntu --private-key nabiyou_key playbook.yml
