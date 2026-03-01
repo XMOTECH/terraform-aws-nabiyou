@@ -1,6 +1,6 @@
 ---
 - name: Déploiement automatique de l'application Nabiyou
-  hosts: serveurs_web
+  hosts: all
   become: yes  # C'est l'équivalent de taper "sudo" avant chaque commande
 
   tasks:
