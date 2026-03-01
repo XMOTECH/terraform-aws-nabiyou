@@ -1,0 +1,23 @@
+---
+- name: Déploiement automatique de l'application Nabiyou
+  hosts: serveurs_web
+  become: yes  # C'est l'équivalent de taper "sudo" avant chaque commande
+
+  tasks:
+    - name: 1. Mettre à jour le catalogue (apt update)
+      apt:
+        update_cache: yes
+
+    - name: 2. Installer Docker (apt install docker.io)
+      apt:
+        name: docker.io
+        state: present
+
+    - name: 3. Démarrer et activer Docker (systemctl start & enable)
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: 4. Lancer le conteneur Nabiyou App (docker run)
+      command: docker run -d -p 80:80 xmotech/nabiyou-app:v1

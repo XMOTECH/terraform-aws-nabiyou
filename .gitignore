@@ -1,0 +1,11 @@
+# Ignorer les clés SSH privées !
+nabiyou_key
+
+# Ignorer les dossiers de configuration de Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+
+# Ignorer le fichier hosts d'Ansible s'il contient des infos sensibles
+hosts.ini
