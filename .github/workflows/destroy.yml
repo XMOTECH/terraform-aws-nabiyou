@@ -1,0 +1,29 @@
+name: Destruction de l'infrastructure Nabiyou
+
+# 1. QUAND déclencher ce robot ? Uniquement manuellement (sur un clic) !
+on:
+  workflow_dispatch:
+
+# 2. QUE doit-il faire ?
+jobs:
+  nettoyage_cloud:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Récupérer le code source
+        uses: actions/checkout@v4
+
+      - name: 2. S'authentifier chez AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: 3. Installer Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: 4. Tout détruire proprement (Init & Destroy)
+        run: |
+          terraform init
+          terraform destroy -auto-approve
