@@ -1,7 +1,7 @@
 ---
 - name: Déploiement automatique de l'application Nabiyou
   hosts: all
-  become: yes  # C'est l'équivalent de taper "sudo" avant chaque commande
+  become: yes
 
   tasks:
     - name: 1. Mettre à jour le catalogue (apt update)
@@ -13,7 +13,7 @@
         name: docker.io
         state: present
 
-   - name: 3. Démarrer et activer Docker (systemctl start & enable)
+    - name: 3. Démarrer et activer Docker
       service:
         name: docker
         state: started
