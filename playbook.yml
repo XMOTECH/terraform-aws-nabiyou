@@ -13,19 +13,15 @@
         name: docker.io
         state: present
 
-    - name: 3. Démarrer et activer Docker (systemctl start & enable)
-      systemd:
+   - name: 3. Démarrer et activer Docker (systemctl start & enable)
+      service:
         name: docker
         state: started
         enabled: yes
 
-     - name: 4. Nettoyage total (Nom + Port)
+    - name: 4. Nettoyage total (Nom + Port)
       shell: |
-        # 1. On supprime le conteneur par son nom s'il existe (même arrêté)
         docker rm -f nabiyou-app || true
-        
-        # 2. On supprime tout autre conteneur qui squatterait le port 80
-        # Note le "-aq" qui cible TOUS les conteneurs (actifs ou non)
         port_containers=$(docker ps -aq --filter "publish=80")
         if [ ! -z "$port_containers" ]; then
           docker rm -f $port_containers
