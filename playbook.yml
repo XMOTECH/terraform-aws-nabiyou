@@ -19,11 +19,16 @@
         state: started
         enabled: yes
 
-    - name: 4. Nettoyage radical du port 80
+     - name: 4. Nettoyage total (Nom + Port)
       shell: |
-        containers=$(docker ps -q --filter "publish=80")
-        if [ ! -z "$containers" ]; then
-          docker rm -f $containers
+        # 1. On supprime le conteneur par son nom s'il existe (même arrêté)
+        docker rm -f nabiyou-app || true
+        
+        # 2. On supprime tout autre conteneur qui squatterait le port 80
+        # Note le "-aq" qui cible TOUS les conteneurs (actifs ou non)
+        port_containers=$(docker ps -aq --filter "publish=80")
+        if [ ! -z "$port_containers" ]; then
+          docker rm -f $port_containers
         fi
       args:
         executable: /bin/bash
