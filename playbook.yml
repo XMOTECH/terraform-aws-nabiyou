@@ -19,5 +19,8 @@
         state: started
         enabled: yes
 
-    - name: 4. Lancer le conteneur Nabiyou App (docker run)
-      command: docker run -d -p 80:80 xmotech/nabiyou-app:v1
+    - name: 4. Nettoyer l'ancien conteneur (si existant)
+      shell: docker rm -f nabiyou-app || true
+
+    - name: 5. Lancer le conteneur Nabiyou App
+      shell: docker run -d --name nabiyou-app -p 80:80 xmotech/nabiyou-app:v1
