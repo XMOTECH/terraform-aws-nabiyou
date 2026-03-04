@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-nabiyou
+spec:
+  replicas: 3 # <-- Le nombre magique
+  selector:
+    matchLabels:
+      app: nabiyou-web
+  template:
+    metadata:
+      labels:
+        app: nabiyou-web # <-- L'étiquette pour que le manager les retrouve
+    spec:
+      containers:
+      - name: mon-conteneur
+        image: xmotech/nabiyou-app:v1
+        ports:
+        - containerPort: 80

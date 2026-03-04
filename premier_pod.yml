@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-nabiyou
+  labels:
+    app: mon-app-web
+spec:
+  containers:
+  - name: conteneur-nabiyou
+    image: xmotech/nabiyou-app:v1
+    ports:
+    - containerPort: 80

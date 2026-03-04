@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nabiyou
+spec:
+  type: NodePort  # Type spécial pour exposer sur Minikube
+  selector:
+    app: nabiyou-web
+  ports:
+    - protocol: TCP
+      port: 80        # Le port du Service
+      targetPort: 80  # Le port à l'intérieur du Pod
+      nodePort: 30001 # Le port "physique" sur lequel on va taper
